@@ -42,9 +42,24 @@ server.on('readChatRoom', (socket, data) => {
 });
 
 
-server.on('message', (socket, data) => {
+server.on('message', (socket, data) => {console.log(chatRooms);
   const { other_id, text} = data.message;
   const roomId = chatRooms[other_id + '-' + socket.pk_id] ? other_id + '-' + socket.pk_id : socket.pk_id + '-' + other_id;
+
+  if (!chatRooms[roomId]) {
+    chatRooms[roomId] = {
+      memberList: [socket.pk_id, other_id],
+      messages: []
+    };
+    chatRooms[roomId][socket.pk_id] = {
+      lastUpdate: 0,
+      newMessages: 0
+    }
+    chatRooms[roomId][other_id] = {
+      lastUpdate: 0,
+      newMessages: 0
+    }
+  }
 
   const time = (new Date).getTime();
 
