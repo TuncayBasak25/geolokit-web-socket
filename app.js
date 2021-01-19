@@ -7,6 +7,7 @@ const chatRooms = {};
 server.on('register', (socket, data) => {
   members[data.pk_id] = socket;
   socket.pk_id = data.pk_id;
+  socket.send({ method: 'validate' });
 });
 
 server.on('getChatRoomList', (socket, { memberIdList }) => {console.log("My pk_id: " + socket.pk_id);
