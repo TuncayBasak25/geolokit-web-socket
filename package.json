@@ -1,0 +1,24 @@
+{
+  "name": "geolokit-socket",
+  "version": "1.0.3",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "pocket-socket": "^1.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TuncayBasak25/socket-server.git"
+  },
+  "author": "Tuncay Basak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TuncayBasak25/socket-server/issues"
+  },
+  "homepage": "https://github.com/TuncayBasak25/socket-server#readme"
+}
