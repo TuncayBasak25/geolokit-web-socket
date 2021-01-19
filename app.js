@@ -37,7 +37,7 @@ server.on('getChatRoomList', (socket, { memberIdList }) => {
 
     memberChatRoomList.push(room);
   }
-
+  console.log(memberChatRoomList);
   socket.send({ method: 'getChatRoomList', chatRoomList: memberChatRoomList});
 });
 
