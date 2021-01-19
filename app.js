@@ -41,7 +41,7 @@ server.on('getChatRoomList', (socket, { memberIdList }) => {
   socket.send({ method: 'getChatRoomList', chatRoomList: memberChatRoomList});
 });
 
-server.on('readChatRoom', (socket, data) => {console.log('read chat room ', data);
+server.on('readChatRoom', (socket, data) => {console.log('read chat room ', data, chatRooms);
   const { other_id } = data;
   const roomId = chatRooms[other_id + '-' + socket.pk_id] ? other_id + '-' + socket.pk_id : socket.pk_id + '-' + other_id;
 
