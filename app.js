@@ -44,7 +44,7 @@ server.on('readChatRoom', (socket, data) => {
 
 server.on('message', (socket, data) => {
   const { other_id, text} = data.message;
-  const roomId = socket.pk_id + '-' + other_id;
+  const roomId = chatRooms[other_id + '-' + socket.pk_id] ? other_id + '-' + socket.pk_id : socket.pk_id + '-' + other_id;
 
   const time = (new Date).getTime();
 
