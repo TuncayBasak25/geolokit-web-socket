@@ -9,7 +9,7 @@ server.on('register', (socket, data) => {
   socket.pk_id = data.pk_id;
 });
 
-server.on('getChatRoomList', (socket, { memberIdList }) => {
+server.on('getChatRoomList', (socket, { memberIdList }) => {console.log("My pk_id: " + socket.pk_id);
   const memberChatRoomList = [];
 
   for (let i=0; i<memberIdList.length; i++) {
