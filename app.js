@@ -9,12 +9,33 @@ server.on('register', (socket, data) => {
   socket.pk_id = data.pk_id;
 });
 
-server.on('getChatRoomList', (socket, data) => {
+server.on('getChatRoomList', (socket, { memberIdList }) => {
   const memberChatRoomList = [];
-  Object.entries(chatRooms).forEach(([roomName, chatRoom]) => {
-    const memberList = roomName.split('-');
-    if (memberList.includes(socket.pk_id.toString())) memberChatRoomList.push(chatRoom)
-  });
+
+  for (let i=0; i<data.memberIdList.length; i++) {
+    const roomId = chatRooms[other_id + '-' + socket.pk_id] ? other_id + '-' + socket.pk_id : socket.pk_id + '-' + other_id;
+
+    let room = chatRooms[roomId];
+
+    if (!room) {
+      chatRooms[roomId] = {
+        memberList: [socket.pk_id, other_id],
+        messages: []
+      };
+      chatRooms[roomId][socket.pk_id] = {
+        lastUpdate: 0,
+        newMessages: 0
+      }
+      chatRooms[roomId][other_id] = {
+        lastUpdate: 0,
+        newMessages: 0
+      }
+
+      room = chatRooms[roomId];
+    }
+
+    memberChatRoomList.push(room);
+  }
 
   socket.send({ method: 'getChatRoomList', chatRoomList: memberChatRoomList});
 });
@@ -25,26 +46,12 @@ server.on('readChatRoom', (socket, data) => {console.log('read chat room ', data
 
   if (!other_id) { console.log(other_id + " other_id"); return; }
 
-  if (!chatRooms[roomId]) {
-    chatRooms[roomId] = {
-      memberList: [socket.pk_id, other_id],
-      messages: []
-    };
-    chatRooms[roomId][socket.pk_id] = {
-      lastUpdate: 0,
-      newMessages: 0
-    }
-    chatRooms[roomId][other_id] = {
-      lastUpdate: 0,
-      newMessages: 0
-    }
-  }
 
   chatRooms[roomId][other_id].newMessages = 0;
 });
 
 
-server.on('message', (socket, data) => {console.log(chatRooms);
+server.on('message', (socket, data) => {
   const { other_id, text} = data.message;
   const roomId = chatRooms[other_id + '-' + socket.pk_id] ? other_id + '-' + socket.pk_id : socket.pk_id + '-' + other_id;
 
