@@ -12,7 +12,7 @@ server.on('register', (socket, data) => {
 server.on('getChatRoomList', (socket, { memberIdList }) => {
   const memberChatRoomList = [];
 
-  for (let i=0; i<data.memberIdList.length; i++) {
+  for (let i=0; i<memberIdList.length; i++) {
     const other_id = memberIdList[i];
     const roomId = chatRooms[other_id + '-' + socket.pk_id] ? other_id + '-' + socket.pk_id : socket.pk_id + '-' + other_id;
 
