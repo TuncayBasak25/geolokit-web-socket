@@ -19,9 +19,11 @@ server.on('getChatRoomList', (socket, data) => {
   socket.send({ method: 'getChatRoomList', chatRoomList: memberChatRoomList});
 });
 
-server.on('readChatRoom', (socket, data) => {console.log('read chat room ', socket.pk_id, data.other_id);
+server.on('readChatRoom', (socket, data) => {console.log('read chat room ', data);
   const { other_id } = data;
   const roomId = chatRooms[other_id + '-' + socket.pk_id] ? other_id + '-' + socket.pk_id : socket.pk_id + '-' + other_id;
+
+  if (!other_id) { console.log(other_id + " other_id"); return; }
 
   if (!chatRooms[roomId]) {
     chatRooms[roomId] = {
