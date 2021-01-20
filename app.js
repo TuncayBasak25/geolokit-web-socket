@@ -42,7 +42,7 @@ server.on('getChatRoomList', (socket, { memberIdList }) => {console.log("My pk_i
 
     memberChatRoomList.push(room);
   }
-  console.log(memberChatRoomList);
+
   socket.send({ method: 'getChatRoomList', chatRoomList: memberChatRoomList});
 });
 
