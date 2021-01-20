@@ -8,6 +8,8 @@ server.on('register', (socket, data) => {
   members[data.pk_id] = socket;
   socket.pk_id = data.pk_id;
   socket.send({ method: 'validate' });
+
+  socket.lastActivity = (new Date).getTime();
 });
 
 server.on('getChatRoomList', (socket, { memberIdList }) => {console.log("My pk_id: " + socket.pk_id);
@@ -43,6 +45,8 @@ server.on('getChatRoomList', (socket, { memberIdList }) => {console.log("My pk_i
 });
 
 server.on('readChatRoom', (socket, data) => {console.log('read chat room ', data, chatRooms);
+  socket.lastActivity = (new Date).getTime();
+
   const { other_id } = data;
   const roomId = chatRooms[other_id + '-' + socket.pk_id] ? other_id + '-' + socket.pk_id : socket.pk_id + '-' + other_id;
 
@@ -50,10 +54,15 @@ server.on('readChatRoom', (socket, data) => {console.log('read chat room ', data
 
 
   chatRooms[roomId][other_id].newMessages = 0;
+  chatRooms[roomId][other_id].lastUpdate = (new Date).getTime();
+
+  if (members[other_id] && members[other_id].readyState === 1) members[other_id].send({ method: 'message-view' });
 });
 
 
 server.on('message', (socket, data) => {
+  socket.lastActivity = (new Date).getTime();
+
   const { other_id, text} = data.message;
   const roomId = chatRooms[other_id + '-' + socket.pk_id] ? other_id + '-' + socket.pk_id : socket.pk_id + '-' + other_id;
 
@@ -73,4 +82,11 @@ server.on('message', (socket, data) => {
   if (members[other_id]) members[other_id].send({ method: 'message', message: message });
 
   socket.send({ method: 'message', message: message });
+});
+
+server.on('getOnlines', (socket, data) => {
+  const time = (new Date).getTime();
+  const onlineMemberIdList = Object.values(members).filter(member => time - member.lastActivity < 60000).map(member => member.pk_id);
+
+  socket.send(onlineMemberIdList);
 });
