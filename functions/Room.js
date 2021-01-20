@@ -1,4 +1,4 @@
-export function Room (id1, id2) {
+function Room (id1, id2) {
   const room = {
     memberList: [id1, id2],
     messages: []
@@ -15,4 +15,8 @@ export function Room (id1, id2) {
   }
 
   return room;
+}
+
+module.exports = {
+  Room
 }
