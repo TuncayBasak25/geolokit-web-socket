@@ -46,7 +46,7 @@ server.on('getChatRoomList', (socket, { memberIdList }) => {console.log("My pk_i
   socket.send({ method: 'getChatRoomList', chatRoomList: memberChatRoomList});
 });
 
-server.on('readChatRoom', (socket, data) => {console.log('read chat room ', data, chatRooms);
+server.on('readChatRoom', (socket, data) => {
   socket.lastActivity = (new Date).getTime();
 
   const { other_id } = data;
@@ -54,6 +54,7 @@ server.on('readChatRoom', (socket, data) => {console.log('read chat room ', data
 
   if (!other_id) { console.log(other_id + " other_id"); return; }
 
+  console.log('read chat room ', roomId, "data ", data);
 
   chatRooms[roomId][other_id].newMessages = 0;
   chatRooms[roomId][other_id].lastUpdate = (new Date).getTime();
