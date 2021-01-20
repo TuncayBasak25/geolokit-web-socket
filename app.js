@@ -28,11 +28,13 @@ server.on('getChatRoomList', (socket, { memberIdList }) => {console.log("My pk_i
       };
       chatRooms[roomId][socket.pk_id] = {
         lastUpdate: 0,
-        newMessages: 0
+        newMessages: 0,
+        lastview: 0
       }
       chatRooms[roomId][other_id] = {
         lastUpdate: 0,
-        newMessages: 0
+        newMessages: 0,
+        lastview: 0
       }
 
       room = chatRooms[roomId];
@@ -55,6 +57,7 @@ server.on('readChatRoom', (socket, data) => {console.log('read chat room ', data
 
   chatRooms[roomId][other_id].newMessages = 0;
   chatRooms[roomId][other_id].lastUpdate = (new Date).getTime();
+  chatRooms[roomId][other_id].lastview = (new Date).getTime();
 
   if (members[other_id] && members[other_id].readyState === 1) members[other_id].send({ method: 'message-view', other_id: socket.pk_id });
 });
@@ -77,6 +80,7 @@ server.on('message', (socket, data) => {
 
   chatRooms[roomId].messages.push(message);
   chatRooms[roomId][socket.pk_id].lastUpdate = time;
+  chatRooms[roomId][socket.pk_id].lastview = time;
   chatRooms[roomId][socket.pk_id].newMessages++;
 
   if (members[other_id]) members[other_id].send({ method: 'message', message: message });
