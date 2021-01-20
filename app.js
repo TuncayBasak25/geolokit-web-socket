@@ -20,7 +20,7 @@ server.on('getChatRoomList', (socket, { memberIdList }) => {console.log("My pk_i
     const other_id = memberIdList[i];
     const roomId = socket.pk_id + '-' + other_id;
 
-    if (chatRoom[roomId]) {
+    if (chatRooms[roomId]) {
       const room = new Room(socket.pk_id, other_id);
       chatRooms[roomId] = room;
       chatRooms[other_id + '-' + socket.pk_id] = room;
